@@ -4,7 +4,7 @@ Vue 3 приложение для управления учетными запи
 
 ## Демо
 
-[Демо saasoft.ant-ag.ru](https://saasoft.ant-ag.ru)
+[Демо saasoft.ant-agl.ru](https://saasoft.ant-agl.ru)
 
 ## Технологии
 
