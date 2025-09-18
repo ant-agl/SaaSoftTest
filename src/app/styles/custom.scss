@@ -1,0 +1,15 @@
+svg.lucide {
+  --size: 1em;
+  width: var(--size);
+  height: var(--size);
+  stroke-width: 1.5;
+}
+
+.anticon svg {
+  vertical-align: baseline;
+}
+
+.ant-btn-default,
+.ant-btn-primary {
+  box-shadow: none;
+}

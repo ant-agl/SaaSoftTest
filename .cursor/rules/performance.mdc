@@ -1,0 +1,75 @@
+---
+globs: *.vue,*.ts
+---
+
+# Производительность и оптимизация
+
+## Vue оптимизации
+
+- Используй `v-memo` для дорогих вычислений
+- Применяй `shallowRef` для больших объектов
+- Используй `markRaw` для объектов, которые не должны быть реактивными
+- Предпочитай `computed` вместо `watch` для вычисляемых значений
+
+## Ленивая загрузка
+
+```typescript
+// Ленивые компоненты
+const LazyComponent = defineAsyncComponent(
+  () => import("@/features/user/ui/UserForm.vue")
+);
+
+// Ленивая загрузка роутов
+const routes = [
+  {
+    path: "/users",
+    component: () => import("@/pages/users/ui/UsersPage.vue"),
+  },
+];
+```
+
+## Мемоизация
+
+```typescript
+// Computed с кэшированием
+const expensiveValue = computed(() => {
+  return heavyCalculation(props.data);
+});
+
+// Мемоизированные функции
+const memoizedHandler = useMemo(() => {
+  return (id: number) => {
+    // обработка
+  };
+}, [dependency]);
+```
+
+## Оптимизация рендеринга
+
+```vue
+<template>
+  <!-- Используй v-memo для дорогих списков -->
+  <div v-for="item in items" :key="item.id" v-memo="[item.id, item.name]">
+    {{ item.name }}
+  </div>
+
+  <!-- Избегай inline функций в шаблонах -->
+  <button @click="() => handleClick(item.id)">Click</button>
+  <!-- Лучше -->
+  <button @click="handleClick(item.id)">Click</button>
+</template>
+```
+
+## Bundle оптимизация
+
+- Используй динамические импорты для больших библиотек
+- Настрой tree-shaking
+- Разделяй vendor и app код
+- Используй `unplugin-auto-import` для автоматических импортов
+
+## API оптимизация
+
+- Используй debounce для поиска
+- Кэшируй результаты API запросов
+- Реализуй пагинацию и виртуализацию для больших списков
+- Используй AbortController для отмены запросов

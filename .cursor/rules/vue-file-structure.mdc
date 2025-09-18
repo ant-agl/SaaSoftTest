@@ -1,0 +1,76 @@
+---
+globs: *.vue
+description: Структура Vue файлов
+---
+
+# Структура Vue файлов
+
+## Порядок блоков в .vue файлах
+
+Всегда используй следующий порядок блоков в Vue файлах:
+
+1. `<script setup lang="ts">` - логика компонента
+2. `<template>` - разметка
+3. `<style>` - стили
+
+## Пример правильной структуры
+
+```vue
+<script setup lang="ts">
+// Импорты
+import { ref, computed, onMounted } from "vue";
+import { Button, Table } from "ant-design-vue";
+
+// Типы
+interface Props {
+  data: SomeType[];
+  loading?: boolean;
+}
+
+// Props и Emits
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+});
+
+// Реактивные данные
+const searchValue = ref("");
+
+// Computed
+const filteredData = computed(() => {
+  return props.data.filter((item) => item.name.includes(searchValue.value));
+});
+
+// Методы
+const handleSearch = () => {
+  // логика поиска
+};
+</script>
+
+<template>
+  <div class="component-wrapper">
+    <a-table
+      :columns="columns"
+      :data-source="filteredData"
+      :loading="loading"
+    />
+  </div>
+</template>
+
+<style scoped>
+.component-wrapper {
+  padding: 16px;
+}
+</style>
+```
+
+## Обоснование порядка
+
+- **Script первым** - логика компонента является основой, читается первой
+- **Template вторым** - разметка использует данные из script
+- **Style последним** - стили применяются к уже определенной структуре
+
+## Исключения
+
+- Если используется `<script>` без setup, он должен быть перед `<script setup>`
+- Множественные `<style>` блоки должны быть в конце файла
+- Комментарии и документация могут быть в начале файла перед script

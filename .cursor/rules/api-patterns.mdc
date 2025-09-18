@@ -1,0 +1,170 @@
+---
+globs: src/**/*.ts,src/**/*.vue
+---
+
+# API Паттерны
+
+## Использование useApi
+
+- Всегда используй `useApi` из `shared/api` для API вызовов
+- Типизируй API функции и ответы
+- Используй типы из `shared/api/Types`
+
+## Структура API слоя
+
+```typescript
+// entities/user/model/api.ts
+import { api, ResponseData } from "@/shared/api";
+import { LoginData } from "./Types";
+
+export const signIn = async (data: LoginData): Promise<string> => {
+  const res = await api.post<ResponseData<{ token: string }>>("/sign-in", data);
+  return res.data.data.token;
+};
+
+export const getUser = async (id: number): Promise<User> => {
+  const res = await api.get<ResponseData<User>>(`/users/${id}`);
+  return res.data.data;
+};
+```
+
+## Использование в store
+
+```typescript
+// entities/user/model/userStore.ts
+import { defineStore } from "pinia";
+import { useApi } from "@/shared/api";
+import { signIn } from "./api";
+import { LoginData } from "./Types";
+
+export const useUserStore = defineStore("user", () => {
+  const { execute: fetchSignin, loading: fetchSigninLoading } = useApi(
+    async (data: LoginData) => {
+      const token = await signIn(data);
+      localStorage.setItem("token", token);
+      return token;
+    }
+  );
+
+  return {
+    fetchSignin,
+    fetchSigninLoading,
+  };
+});
+```
+
+## Использование в компонентах
+
+```vue
+<script setup lang="ts">
+import { useUserStore } from "@/entities/user";
+
+const userStore = useUserStore();
+
+const handleLogin = async (loginData: LoginData) => {
+  try {
+    await userStore.fetchSignin(loginData);
+    // Успешная авторизация
+  } catch (error) {
+    // Ошибка обрабатывается автоматически
+  }
+};
+</script>
+```
+
+## Типы API
+
+```typescript
+// shared/api/Types.ts
+export interface ResponseData<T> {
+  data: T;
+  code: number;
+  message: string;
+}
+
+export interface PaginationData<T> {
+  objects: T[] | null;
+  number_of_objects: number;
+}
+
+export type ResponsePData<T> = ResponseData<PaginationData<T>>;
+
+export interface ApiError {
+  code: number;
+  message: string;
+  error: string;
+}
+
+export interface UseApiOptions {
+  isMessageError?: boolean;
+  messagesError?: Record<number, string>;
+  resetOnSuccess?: boolean;
+  isSignal?: boolean;
+}
+
+// entities/user/model/Types.ts
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+```
+
+## Прямое использование useApi
+
+```typescript
+// Для прямого использования в компонентах
+import { useApi } from "@/shared/api";
+import { api } from "@/shared/api";
+
+const { data, loading, error, execute } = useApi(async (userId: number) => {
+  const res = await api.get<ResponseData<User>>(`/users/${userId}`);
+  return res.data.data;
+});
+
+// Вызов
+const loadUser = () => execute(123);
+```
+
+## Обработка ошибок
+
+- Ошибки обрабатываются автоматически через `useApi`
+- Настрой сообщения об ошибках через `messagesError`
+- Используй `isMessageError: false` для отключения уведомлений
+- Ошибки показываются через `notification.error` из Ant Design
+
+## Паттерны для разных типов запросов
+
+```typescript
+// GET запросы
+const {
+  data: users,
+  loading,
+  execute: fetchUsers,
+} = useApi(async () => {
+  const res = await api.get<ResponseData<User[]>>("/users");
+  return res.data.data;
+});
+
+// POST запросы
+const { execute: createUser } = useApi(async (userData: CreateUserRequest) => {
+  const res = await api.post<ResponseData<User>>("/users", userData);
+  return res.data.data;
+});
+
+// С пагинацией
+const { data: paginatedUsers, execute: fetchUsersPage } = useApi(
+  async (page: number, pageSize: number) => {
+    const res = await api.get<ResponsePData<User>>("/users", {
+      params: { page, pageSize },
+    });
+    return res.data.data;
+  }
+);
+```

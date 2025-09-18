@@ -1,0 +1,97 @@
+---
+globs: *.ts,*.vue
+---
+
+# Строгая типизация TypeScript
+
+## Обязательная типизация
+
+- Все функции должны иметь типы параметров и возвращаемого значения
+- Все переменные должны иметь явные типы
+- Используй `interface` для объектов, `type` для примитивов и объединений
+- Избегай `any`, используй `unknown` если тип неизвестен
+
+## Типы для Vue компонентов
+
+```typescript
+// Props
+interface Props {
+  title: string;
+  count?: number;
+  items: Item[];
+  onUpdate?: (value: string) => void;
+}
+
+// Emits
+interface Emits {
+  (e: "update", value: string): void;
+  (e: "delete", id: number): void;
+  (e: "change", data: FormData): void;
+}
+
+// Refs
+const count = ref<number>(0);
+const user = ref<User | null>(null);
+const items = ref<Item[]>([]);
+
+// Computed
+const total = computed<number>(() =>
+  items.value.reduce((sum, item) => sum + item.price, 0)
+);
+
+// Methods
+const handleSubmit = (data: FormData): Promise<void> => {
+  // логика
+};
+```
+
+## Типы для API
+
+```typescript
+// Request/Response типы
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  token: string;
+  user: User;
+  expiresAt: string;
+}
+
+// API функции
+const login = (data: LoginRequest): Promise<LoginResponse> => {
+  return apiClient.post("/auth/login", data);
+};
+```
+
+## Утилитарные типы
+
+```typescript
+// Pick, Omit, Partial
+type CreateUserRequest = Omit<User, "id" | "createdAt">;
+type UpdateUserRequest = Partial<Pick<User, "name" | "email">>;
+
+// Union types
+type Status = "pending" | "approved" | "rejected";
+type Theme = "light" | "dark";
+
+// Generic types
+interface ApiResponse<T> {
+  data: T;
+  message: string;
+  success: boolean;
+}
+
+// Utility types
+type NonNullable<T> = T extends null | undefined ? never : T;
+type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+```
+
+## Строгие проверки
+
+- Включи `strict: true` в tsconfig.json
+- Используй `noImplicitAny: true`
+- Включи `noImplicitReturns: true`
+- Используй `exactOptionalPropertyTypes: true`

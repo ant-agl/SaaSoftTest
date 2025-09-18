@@ -1,0 +1,8 @@
+@use "transition";
+@use "scroll";
+@use "custom";
+
+html,
+body {
+  overscroll-behavior: none;
+}

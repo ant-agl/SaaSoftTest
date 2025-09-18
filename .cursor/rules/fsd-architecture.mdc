@@ -1,0 +1,43 @@
+---
+globs: src/**/*
+---
+
+# FSD (Feature-Sliced Design) Архитектура
+
+## Структура слоев
+
+- `app/` - инициализация приложения, провайдеры, глобальные стили
+- `pages/` - страницы приложения
+- `widgets/` - крупные UI блоки
+- `features/` - функциональности
+- `entities/` - бизнес-сущности
+- `shared/` - переиспользуемые ресурсы
+
+## Правила импортов
+
+- Можно импортировать только из нижележащих слоев
+- `pages` → `widgets`, `features`, `entities`, `shared`
+- `widgets` → `features`, `entities`, `shared`
+- `features` → `entities`, `shared`
+- `entities` → `shared`
+
+## Структура слайса
+
+```
+feature/
+├── ui/           # UI компоненты
+├── model/        # Бизнес-логика, store, типы, api
+└── index.ts      # Публичный API
+```
+
+## Именование
+
+- Компоненты: PascalCase (`UserCard.vue`)
+- Файлы: camelCase (`userStore.ts`)
+- Директории: kebab-case (`user-profile/`)
+- Константы: UPPER_SNAKE_CASE (`API_BASE_URL`)
+
+## Публичный API
+
+- Каждый слайс должен экспортировать только необходимые части через `index.ts`
+- Не экспортируй внутренние детали реализации

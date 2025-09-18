@@ -1,0 +1,77 @@
+---
+globs: *.vue,*.ts
+---
+
+# Lucide Icons + iconSlot
+
+## Использование иконок
+
+- Используй `lucide-vue-next` для иконок
+- Всегда оборачивай иконки в функцию `$iconSlot()`
+- Импортируй иконки из `lucide-vue-next`
+
+## Импорт иконок
+
+```typescript
+import { Search, Plus, Edit, Trash2, Download } from "lucide-vue-next";
+```
+
+## Использование в шаблонах
+
+```vue
+<template>
+  <!-- В кнопках -->
+  <a-button type="primary">
+    <template #icon>
+      <component :is="$iconSlot(Plus)" />
+    </template>
+    Добавить
+  </a-button>
+
+  <!-- В таблицах -->
+  <a-table :columns="columns">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'actions'">
+        <a-space>
+          <a-button type="text" @click="editItem(record)">
+            <template #icon>
+              <component :is="$iconSlot(Edit)" />
+            </template>
+          </a-button>
+          <a-button type="text" danger @click="deleteItem(record)">
+            <template #icon>
+              <component :is="$iconSlot(Trash2)" />
+            </template>
+          </a-button>
+        </a-space>
+      </template>
+    </template>
+  </a-table>
+</template>
+```
+
+## В computed для колонок таблицы
+
+```typescript
+const columns = computed(() => [
+  {
+    title: "Действия",
+    key: "actions",
+    width: 120,
+    align: "center",
+  },
+]);
+```
+
+## Популярные иконки
+
+- `Search` - поиск
+- `Plus` - добавить
+- `Edit` - редактировать
+- `Trash2` - удалить
+- `Download` - скачать
+- `Upload` - загрузить
+- `Filter` - фильтр
+- `Settings` - настройки
+- `User` - пользователь
+- `Lock` - заблокировать

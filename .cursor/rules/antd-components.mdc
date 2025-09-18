@@ -1,0 +1,55 @@
+---
+globs: *.vue,*.ts
+---
+
+# Ant Design Vue Компоненты
+
+## Максимальное использование Ant Design
+
+- Предпочитай компоненты Ant Design вместо кастомных
+- Используй `Table`, `Form`, `Modal`, `Button`, `Input`, `Select` и другие
+- Настройка через props, не переопределяй стили без необходимости
+
+## Формы
+
+```vue
+<template>
+  <a-form :model="formData" :rules="rules" @finish="handleSubmit">
+    <a-form-item name="name" label="Название">
+      <a-input v-model:value="formData.name" />
+    </a-form-item>
+  </a-form>
+</template>
+```
+
+## Таблицы
+
+```vue
+<template>
+  <a-table
+    :columns="columns"
+    :data-source="data"
+    :loading="loading"
+    :pagination="pagination"
+    @change="handleTableChange"
+  />
+</template>
+```
+
+## Уведомления
+
+```typescript
+import { notification } from "ant-design-vue";
+
+// Успех
+notification.success({
+  message: "Успешно",
+  description: "Операция выполнена",
+});
+
+// Ошибка
+notification.error({
+  message: "Ошибка",
+  description: "Что-то пошло не так",
+});
+```

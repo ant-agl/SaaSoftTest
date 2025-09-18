@@ -1,0 +1,49 @@
+:root {
+  --scrollbar-color-thumb: #888;
+  --scrollbar-color-track: transparent;
+  --scrollbar-width: thin;
+  --scrollbar-width-legacy: 6px;
+  --scrollbar-radius: 3px;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-width-legacy);
+    height: var(--scrollbar-width-legacy);
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-color-track);
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-color-thumb);
+    border-radius: var(--scrollbar-radius);
+
+    &:hover {
+      background-color: #777;
+    }
+
+    &:active {
+      background-color: #666;
+    }
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* Firefox fallback (limited styling) */
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: var(--scrollbar-width);
+    scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+  }
+}
