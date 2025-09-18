@@ -10,6 +10,7 @@ const app = createApp(App);
 
 app.use(store).use(router);
 
+// Для корректной работы с иконками Lucide в Ant Design Vue
 app.config.globalProperties.$iconSlot = iconSlot;
 
 app.mount("#app");

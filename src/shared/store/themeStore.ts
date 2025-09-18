@@ -59,5 +59,5 @@ export const useThemeStore = defineStore("theme", () => {
     return themeLight;
   });
 
-  return { themeOptions, currentThemeToken };
+  return { themeOptions, currentThemeToken, theme };
 });
