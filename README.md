@@ -6,6 +6,8 @@ Vue 3 приложение для управления учетными запи
 
 [Демо saasoft.ant-agl.ru](https://saasoft.ant-agl.ru)
 
+**!!! Для авторизации подойдут любые данные**
+
 ## Технологии
 
 - **Vue 3** + **TypeScript** + **Composition API**

@@ -52,7 +52,12 @@ const heightList = computed(() => {
 
 <template>
   <div>
-    <a-form ref="formRef" :model="accounts" layout="vertical">
+    <a-form
+      v-if="accounts.length > 0"
+      ref="formRef"
+      :model="accounts"
+      layout="vertical"
+    >
       <TransitionGroup
         name="list"
         tag="div"
@@ -144,6 +149,8 @@ const heightList = computed(() => {
         </a-flex>
       </TransitionGroup>
     </a-form>
+
+    <a-empty v-else />
   </div>
 </template>
 
